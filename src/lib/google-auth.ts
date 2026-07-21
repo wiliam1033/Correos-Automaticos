@@ -50,19 +50,13 @@ export const initAuth = (
 export const googleSignIn = async (): Promise<{ user: User; accessToken: string } | null> => {
   try {
     isSigningIn = true;
-    const isInIframe = window !== window.parent;
-    if (isInIframe) {
-      const result = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      if (credential?.accessToken) {
-        cachedAccessToken = credential.accessToken;
-        return { user: result.user, accessToken: cachedAccessToken };
-      }
-      return null;
-    } else {
-      await signInWithRedirect(auth, provider);
-      return null;
+    const result = await signInWithPopup(auth, provider);
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    if (credential?.accessToken) {
+      cachedAccessToken = credential.accessToken;
+      return { user: result.user, accessToken: cachedAccessToken };
     }
+    return null;
   } catch (error: any) {
     console.error('Sign in error:', error);
     throw error;
