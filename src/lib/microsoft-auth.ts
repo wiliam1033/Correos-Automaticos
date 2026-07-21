@@ -23,7 +23,12 @@ const initializeMsal = async () => {
     initializePromise = (async () => {
       try {
         await msalInstance.initialize();
-        await msalInstance.handleRedirectPromise();
+        const response = await msalInstance.handleRedirectPromise();
+        if (response) {
+          activeAccount = response.account;
+          msalInstance.setActiveAccount(activeAccount);
+          cachedAccessToken = response.accessToken;
+        }
       } catch (e) {
         console.warn("MSAL initialization/redirect warning:", e);
       }
