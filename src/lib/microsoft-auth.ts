@@ -71,24 +71,13 @@ export const initMicrosoftAuth = async (
   }
 };
 
-export const microsoftSignIn = async (): Promise<{ user: any; accessToken: string } | null> => {
+export const microsoftSignIn = async (): Promise<void> => {
   await initializeMsal();
   try {
     const loginRequest = {
       scopes: ["Mail.Send", "User.Read"]
     };
-    const response: AuthenticationResult = await msalInstance.loginPopup(loginRequest);
-    activeAccount = response.account;
-    msalInstance.setActiveAccount(activeAccount);
-    cachedAccessToken = response.accessToken;
-    
-    return {
-      user: {
-        email: response.account?.username,
-        name: response.account?.name
-      },
-      accessToken: response.accessToken
-    };
+    await msalInstance.loginRedirect(loginRequest);
   } catch (error) {
     console.error("Microsoft sign in error:", error);
     throw error;
@@ -102,7 +91,7 @@ export const getMicrosoftAccessToken = async (): Promise<string | null> => {
 export const microsoftLogout = async () => {
   await initializeMsal();
   if (activeAccount) {
-    await msalInstance.logoutPopup({
+    await msalInstance.logoutRedirect({
       account: activeAccount
     });
   }

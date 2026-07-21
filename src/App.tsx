@@ -85,15 +85,10 @@ export default function App() {
   const handleMicrosoftLogin = async () => {
     setIsLoggingIn(true);
     try {
-      const result = await microsoftSignIn();
-      if (result) {
-        setUser(result.user);
-        setAuthProvider('microsoft');
-        setNeedsAuth(false);
-      }
+      await microsoftSignIn();
+      // Code won't reach here normally as loginRedirect redirects the page.
     } catch (err) {
       console.error('Microsoft Login failed:', err);
-    } finally {
       setIsLoggingIn(false);
     }
   };
