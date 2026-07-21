@@ -59,6 +59,7 @@ export const googleSignIn = async (): Promise<{ user: User; accessToken: string 
     return null;
   } catch (error: any) {
     console.error('Sign in error:', error);
+    alert(`Error de inicio de sesión: ${error.message || error}`);
     throw error;
   } finally {
     isSigningIn = false;
