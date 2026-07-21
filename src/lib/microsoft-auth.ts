@@ -4,7 +4,7 @@ const msalConfig: Configuration = {
   auth: {
     clientId: "96a4ec44-e1d7-4b8c-a3dd-7f725865598a",
     authority: "https://login.microsoftonline.com/8b75b7be-1c8e-45c0-bedc-10aaf1377ed6",
-    redirectUri: window.location.origin,
+    redirectUri: window.location.origin + window.location.pathname,
   },
   cache: {
     cacheLocation: "sessionStorage"
