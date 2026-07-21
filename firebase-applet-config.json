@@ -1,11 +1,11 @@
 {
-  "projectId": "gen-lang-client-0013484177",
-  "appId": "1:1014230698349:web:753c71f60d9f297c713264",
-  "apiKey": "AIzaSyBBPML4uJLeSn9ONLP4UebFiKFUm6IkuDs",
-  "authDomain": "gen-lang-client-0013484177.firebaseapp.com",
-  "storageBucket": "gen-lang-client-0013484177.firebasestorage.app",
-  "messagingSenderId": "1014230698349",
-  "measurementId": "",
-  "oAuthClientId": "1014230698349-op7piaikb7cuuebn7mfg1fa1clnk2aml.apps.googleusercontent.com",
+  "projectId": "automaticos-correos",
+  "appId": "1:217791792144:web:fd89f4f0220df601e73695",
+  "apiKey": "AIzaSyDM8Vqkq6J3Bed96fQlmFB7RsnO8UNVJgU",
+  "authDomain": "automaticos-correos.firebaseapp.com",
+  "storageBucket": "automaticos-correos.firebasestorage.app",
+  "messagingSenderId": "217791792144",
+  "measurementId": "G-Q5RJ6X3F95",
+  "oAuthClientId": "",
   "recaptchaSiteKey": ""
 }
