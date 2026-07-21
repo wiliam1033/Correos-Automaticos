@@ -79,17 +79,25 @@ export const microsoftSignIn = async (): Promise<{ user: any; accessToken: strin
       prompt: "select_account"
     };
     
-    const response = await msalInstance.loginPopup(loginRequest);
-    if (response) {
-      activeAccount = response.account;
-      msalInstance.setActiveAccount(activeAccount);
-      cachedAccessToken = response.accessToken;
-      return {
-        user: { email: activeAccount.username, name: activeAccount.name },
-        accessToken: cachedAccessToken
-      };
+    const isInIframe = window !== window.parent;
+    if (isInIframe) {
+      const response = await msalInstance.loginPopup(loginRequest);
+      if (response) {
+        activeAccount = response.account;
+        msalInstance.setActiveAccount(activeAccount);
+        cachedAccessToken = response.accessToken;
+        return {
+          user: { email: activeAccount.username, name: activeAccount.name },
+          accessToken: cachedAccessToken
+        };
+      }
+      return null;
+    } else {
+      await msalInstance.loginRedirect(loginRequest);
+      // Wait for redirect to happen
+      await new Promise(() => {});
+      return null;
     }
-    return null;
   } catch (error) {
     console.error("Microsoft sign in error:", error);
     throw error;
