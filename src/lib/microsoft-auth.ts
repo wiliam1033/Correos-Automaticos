@@ -3,7 +3,7 @@ import { PublicClientApplication, Configuration, AuthenticationResult, AccountIn
 const msalConfig: Configuration = {
   auth: {
     clientId: "96a4ec44-e1d7-4b8c-a3dd-7f725865598a",
-    authority: "https://login.microsoftonline.com/8b75b7be-1c8e-45c0-bedc-10aaf1377ed6",
+    authority: "https://login.microsoftonline.com/common",
     redirectUri: window.location.origin + window.location.pathname,
   },
   cache: {
@@ -75,7 +75,8 @@ export const microsoftSignIn = async (): Promise<void> => {
   await initializeMsal();
   try {
     const loginRequest = {
-      scopes: ["Mail.Send", "User.Read"]
+      scopes: ["Mail.Send", "User.Read"],
+      prompt: "select_account"
     };
     await msalInstance.loginRedirect(loginRequest);
   } catch (error) {
