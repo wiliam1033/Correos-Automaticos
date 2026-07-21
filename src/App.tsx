@@ -70,15 +70,10 @@ export default function App() {
   const handleGoogleLogin = async () => {
     setIsLoggingIn(true);
     try {
-      const result = await googleSignIn();
-      if (result) {
-        setUser(result.user);
-        setAuthProvider('google');
-        setNeedsAuth(false);
-      }
+      await googleSignIn();
+      // Will redirect
     } catch (err) {
       console.error('Google Login failed:', err);
-    } finally {
       setIsLoggingIn(false);
     }
   };
