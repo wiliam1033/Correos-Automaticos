@@ -71,14 +71,31 @@ export const initMicrosoftAuth = async (
   }
 };
 
-export const microsoftSignIn = async (): Promise<void> => {
+export const microsoftSignIn = async (): Promise<{ user: any; accessToken: string } | null> => {
   await initializeMsal();
   try {
     const loginRequest = {
       scopes: ["Mail.Send", "User.Read"],
       prompt: "select_account"
     };
-    await msalInstance.loginRedirect(loginRequest);
+    
+    const isInIframe = window !== window.parent;
+    if (isInIframe) {
+      const response = await msalInstance.loginPopup(loginRequest);
+      if (response) {
+        activeAccount = response.account;
+        msalInstance.setActiveAccount(activeAccount);
+        cachedAccessToken = response.accessToken;
+        return {
+          user: { email: activeAccount.username, name: activeAccount.name },
+          accessToken: cachedAccessToken
+        };
+      }
+      return null;
+    } else {
+      await msalInstance.loginRedirect(loginRequest);
+      return null;
+    }
   } catch (error) {
     console.error("Microsoft sign in error:", error);
     throw error;

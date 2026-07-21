@@ -70,8 +70,12 @@ export default function App() {
   const handleGoogleLogin = async () => {
     setIsLoggingIn(true);
     try {
-      await googleSignIn();
-      // Will redirect
+      const result = await googleSignIn();
+      if (result) {
+        setUser(result.user);
+        setAuthProvider('google');
+        setNeedsAuth(false);
+      }
     } catch (err) {
       console.error('Google Login failed:', err);
       setIsLoggingIn(false);
@@ -81,8 +85,12 @@ export default function App() {
   const handleMicrosoftLogin = async () => {
     setIsLoggingIn(true);
     try {
-      await microsoftSignIn();
-      // Code won't reach here normally as loginRedirect redirects the page.
+      const result = await microsoftSignIn();
+      if (result) {
+        setUser(result.user);
+        setAuthProvider('microsoft');
+        setNeedsAuth(false);
+      }
     } catch (err) {
       console.error('Microsoft Login failed:', err);
       setIsLoggingIn(false);
