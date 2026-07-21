@@ -30,6 +30,7 @@ export default function App() {
   const [authProvider, setAuthProvider] = useState<'google' | 'microsoft' | null>(null);
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [attachment, setAttachment] = useState<File | null>(null);
+  const [subject, setSubject] = useState('');
   const [explicacion, setExplicacion] = useState('');
   const [showConfirm, setShowConfirm] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -182,12 +183,12 @@ ${explicacion}`;
       try {
         const body = generarCuerpo(row);
         const nombreAdjunto = attachment ? attachment.name : row.adjunto;
-        const subject = `Oficio adjunto: ${nombreAdjunto}`;
+        const finalSubject = subject || `Oficio adjunto: ${nombreAdjunto}`;
         
         if (authProvider === 'google') {
-          await sendEmail(token, row.correo, subject, body, attachment);
+          await sendEmail(token, row.correo, finalSubject, body, attachment);
         } else if (authProvider === 'microsoft') {
-          await sendOutlookEmail(token, row.correo, subject, body, attachment);
+          await sendOutlookEmail(token, row.correo, finalSubject, body, attachment);
         }
         
         setData(prev => {
@@ -327,7 +328,10 @@ ${explicacion}`;
                 className="sr-only" 
                 onChange={(e) => {
                   const file = e.target.files?.[0];
-                  if (file) setAttachment(file);
+                  if (file) {
+                    setAttachment(file);
+                    setSubject(`Oficio adjunto: ${file.name}`);
+                  }
                 }}
               />
             </label>
@@ -339,11 +343,26 @@ ${explicacion}`;
           </div>
         </div>
 
+        {/* Asunto (Común para todos) */}
+        <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
+          <h3 className="text-lg font-medium text-gray-900 flex items-center gap-2 mb-4">
+            <Mail className="text-gray-400" size={20} />
+            3. Asunto del Correo
+          </h3>
+          <input
+            type="text"
+            value={subject}
+            onChange={(e) => setSubject(e.target.value)}
+            placeholder="Asunto del correo (se autocompleta al subir el archivo adjunto)..."
+            className="w-full p-4 text-sm border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+          />
+        </div>
+
         {/* Explicación (Común para todos) */}
         <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100">
           <h3 className="text-lg font-medium text-gray-900 flex items-center gap-2 mb-4">
             <FileText className="text-gray-400" size={20} />
-            3. Desarrollo o Explicación (Común para todos)
+            4. Desarrollo o Explicación (Común para todos)
           </h3>
           <textarea
             value={explicacion}
@@ -428,7 +447,7 @@ ${explicacion}`;
               className={`${showConfirm ? 'bg-red-600 hover:bg-red-700' : 'bg-blue-600 hover:bg-blue-700'} disabled:opacity-50 disabled:cursor-not-allowed text-white px-8 py-4 rounded-xl font-bold text-lg transition-colors shadow-lg flex items-center gap-3`}
             >
               <Mail size={24} />
-              {isProcessing ? 'Enviando Correos...' : showConfirm ? `Confirmar envío de ${data.length} correos` : '4. Enviar Correos'}
+              {isProcessing ? 'Enviando Correos...' : showConfirm ? `Confirmar envío de ${data.length} correos` : '5. Enviar Correos'}
             </button>
             {showConfirm && (
               <button
